@@ -51,3 +51,12 @@
     background: #f5f5f7;
     border-radius: 5px;
 }
+
+.show-code-button {
+    display: flex;
+    width: 100%;
+}
+
+.button-html , .button-css , .button-java-script {
+    width: 100%;
+}
