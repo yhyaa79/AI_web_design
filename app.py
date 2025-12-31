@@ -12,16 +12,7 @@ app.secret_key = 'my_secret_key'
 
 @app.route('/')
 def index():
-    if 'user_id' not in session:
-        session['user_id'] = str(uuid.uuid4())
 
-    user_id = session['user_id']
-    session_id = request.args.get('session_id') 
-
-    if session_id and session_id not in conversation_history:
-        conversation_history[session_id] = []
-    else:
-        conversation_history[session_id] = []
 
     return send_from_directory('static/html', 'index.html')
 
