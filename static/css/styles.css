@@ -1,0 +1,38 @@
+.container {
+    display: grid;
+    gap: 20px;
+}
+
+.top-div {
+    display: grid;
+    gap: 20px;
+}
+
+.show-message {
+    width: 200px;
+    height: 120px;
+    border: 1px solid #000000;
+}
+
+.write-text {}
+
+.send-message {}
+
+.write-message {}
+
+.bottom-div {
+    display: flex;
+    gap: 20px;
+}
+
+.show-web {
+    width: 200px;
+    height: 120px;
+    border: 1px solid #000000;
+}
+
+.show-code {
+    width: 200px;
+    height: 120px;
+    border: 1px solid #000000;
+}

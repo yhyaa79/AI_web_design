@@ -1,8 +1,6 @@
 import os
 # بالای فایل، بعد از importها این خط رو اضافه کن
 from flask import Flask, request, jsonify, Response, session, send_from_directory, url_for
-from utils import check_rate_limit, perform_stt, build_llm_messages, stream_llm_generator
-from config import generate
 import uuid
 import threading
 
