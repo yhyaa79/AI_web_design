@@ -60,3 +60,16 @@
 .button-html , .button-css , .button-java-script {
     width: 100%;
 }
+
+
+.reload-show-web {
+    position: relative;
+    top: 15px;
+    right: 20px;
+}
+
+.enlarge-show-web {
+    position: relative;
+    top: 15px;
+    right: 30px;
+}
