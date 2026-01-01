@@ -7,49 +7,54 @@
     <title>طراحی سایت با AI</title>
 
     <link rel="stylesheet" href="./static/css/styles.css">
-
 </head>
 
 <body class="bg-idle">
 
     <div class="container">
-        <div class="top-div">
-            <div class="show-message"></div>
+        <!-- سمت راست: قسمت چت (در rtl راست است) -->
+        <div class="chat-section">
+            <div class="messages show-message">
+                <!-- پیام‌ها اینجا نمایش داده می‌شوند -->
+            </div>
 
-            <div class="write-text">
-                <textarea class="write-message"></textarea>
+            <div class="input-area write-text">
+                <textarea class="write-message" placeholder="پیام خود را بنویسید..."></textarea>
                 <select class="model-select">
                     <option value="aaa" selected>aaa</option>
                     <option value="bbb">bbb</option>
                     <option value="ccc">ccc</option>
                 </select>
-                <button class="send-message">send</button>
+                <button class="send-message">ارسال</button>
             </div>
         </div>
 
-        <div class="bottom-div">
-            <div class="show-web">
-                <button class="reload-show-web">aa</button>
-                <button class="enlarge-show-web">bb</button>
-
+        <!-- سمت چپ: نمایش کد -->
+        <div class="code-section">
+            <div class="code-tabs show-code-button">
+                <button class="button-html active">HTML</button>
+                <button class="button-css">CSS</button>
+                <button class="button-java-script">JavaScript</button>
             </div>
 
-            <div class="show-code">
-                <div class="show-code-button">
-                    <button class="button-html">Html</button>
-                    <button class="button-css">Css</button>
-                    <button class="button-java-script">JavaScript</button>
-                </div>
-                <div class="codes-show-code">
-
-                </div>
+            <div class="code-display codes-show-code">
+                <!-- کد اینجا نمایش داده می‌شود -->
+                <pre><code>// کد تولید شده توسط AI اینجا ظاهر می‌شود</code></pre>
             </div>
         </div>
     </div>
 
-
     <script src="./static/js/script.js"></script>
-
+    <!-- اگر نیاز به سوئیچ تب‌ها دارید، این اسکریپت ساده اضافه کنید -->
+    <script>
+        document.querySelectorAll('.code-tabs button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.code-tabs button').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                // اینجا می‌توانید محتوای کد را بر اساس تب تغییر دهید
+            });
+        });
+    </script>
 
 </body>
 
