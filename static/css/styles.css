@@ -118,9 +118,17 @@ html {
 .files-display {
     width: 30%;
     overflow-y: auto;
-    padding: 20px;
     background: #c5c3c3;
     border-radius: 10px 0 0 10px;
+        text-align: left;
+}
+
+.file-name {
+    padding: 5px 10px;
+}
+
+.file-name:hover {
+    background: #f8f8f8;
 }
 
 
