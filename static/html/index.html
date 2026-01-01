@@ -15,7 +15,15 @@
         <!-- سمت راست: قسمت چت (در rtl راست است) -->
         <div class="chat-section">
             <div class="messages show-message">
-                <!-- پیام‌ها اینجا نمایش داده می‌شوند -->
+                <div class="message"></div>
+                <div class="message"></div>
+                <div class="message"></div>
+                <div class="message"></div>
+                <div class="message"></div>
+                <div class="message"></div>
+                <div class="message"></div>
+                <div class="message"></div>
+                <div class="message"></div>
             </div>
 
             <div class="input-area write-text">
@@ -49,7 +57,8 @@
     <script>
         document.querySelectorAll('.code-tabs button').forEach(btn => {
             btn.addEventListener('click', () => {
-                document.querySelectorAll('.code-tabs button').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.code-tabs button').forEach(b => b.classList.remove(
+                    'active'));
                 btn.classList.add('active');
                 // اینجا می‌توانید محتوای کد را بر اساس تب تغییر دهید
             });
