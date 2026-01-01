@@ -11,6 +11,14 @@
 
 <body class="bg-idle">
 
+    <div class="heder">
+        <div class="code-preview-heder">
+            <button class="code-heder">code</button>
+            <button class="preview-heder">preview</button>
+        </div>
+
+    </div>
+
     <div class="container">
         <!-- سمت راست: قسمت چت (در rtl راست است) -->
         <div class="chat-section">
@@ -56,17 +64,6 @@
     </div>
 
     <script src="./static/js/script.js"></script>
-    <!-- اگر نیاز به سوئیچ تب‌ها دارید، این اسکریپت ساده اضافه کنید -->
-    <script>
-        document.querySelectorAll('.code-tabs button').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.code-tabs button').forEach(b => b.classList.remove(
-                    'active'));
-                btn.classList.add('active');
-                // اینجا می‌توانید محتوای کد را بر اساس تب تغییر دهید
-            });
-        });
-    </script>
 
 </body>
 
