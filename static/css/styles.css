@@ -8,18 +8,18 @@ html {
 }
 
 .heder {
-    height: 50px;
+    height: 35px;
 }
 
 .code-preview-heder {
     position: absolute;
-    top: 20px;
+    top: 13px;
     left: 41%;
 }
 
 .container {
     display: flex;
-    height: 100vh;
+    height: 95vh;
     flex-direction: row-reverse;
     /* برای rtl: چت راست، کد چپ */
 }
@@ -28,8 +28,6 @@ html {
     width: 40%;
     display: flex;
     flex-direction: column;
-    border-left: 1px solid #ccc;
-    /* جداکننده */
 }
 
 .messages {
@@ -55,16 +53,28 @@ html {
     padding: 10px;
     border-top: 1px solid #ccc;
     gap: 10px;
-    margin: 10px;
-    border-radius: 10px;
+    margin: 0 10px;
+    border-radius: 10px 10px 0 0;
     background: #f8f8f8;
-    margin-top: 0;
+    
 }
 
 .input-area textarea {
     flex: 1;
     resize: none;
-    height: 60px;
+    height: 100px;
+        background: #00000000;
+    border: none;
+}
+
+.input-model {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    gap: 10px;
+    margin: 0 10px 10px 10px;
+    border-radius: 0 0 10px 10px;
+    background: #f8f8f8;
 }
 
 .code-section {
