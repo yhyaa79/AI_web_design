@@ -7,6 +7,15 @@
     <title>طراحی سایت با AI</title>
 
     <link rel="stylesheet" href="./static/css/styles.css">
+
+    <!-- لود CodeMirror از CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
+
 </head>
 
 <body class="bg-idle">
@@ -14,7 +23,7 @@
     <div class="heder">
         <div class="code-preview-heder">
             <button class="code-heder tab-btn">code</button>
-            <button class="preview-heder tab-btn">preview</button>
+            <button class="preview-heder tab-btn active">preview</button>
         </div>
 
     </div>
@@ -50,38 +59,64 @@
 
         <!-- سمت چپ: نمایش کد -->
         <div class="code-section">
-            <!--             <div class="code-tabs show-code-button">
-                <button class="button-html active">HTML</button>
-                <button class="button-css">CSS</button>
-                <button class="button-java-script">JavaScript</button>
-            </div> -->
             <div class="files-display">
-                <div class="file-name">dd</div>
-                <div class="file-name">dd</div>
-                <div class="file-name">dd</div>
-                <div class="file-name">dd</div>
+                <div class="file-name">index.html</div>
+                <div class="file-name">style.css</div>
+                <div class="file-name">script.js</div>
+                <div class="file-name">README.md</div>
             </div>
 
-            <div class="code-display codes-show-code">
-                <!-- کد اینجا نمایش داده می‌شود -->
-                <pre><code>// کد تولید شده توسط AI اینجا ظاهر می‌شود</code></pre>
+            <div class="code-display codes-show-code" id="code-editor-container">
+                <!-- اینجا CodeMirror لود می‌شود -->
             </div>
         </div>
     </div>
 
     <script src="./static/js/script.js"></script>
-<script>
-    document.querySelectorAll('.tab-btn').forEach(button => {
-        button.addEventListener('click', () => {
-            // اول کلاس active را از همه دکمه‌ها بردار
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active');
+
+    <script>
+        document.querySelectorAll('.tab-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // اول کلاس active را از همه دکمه‌ها بردار
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                // سپس به دکمه کلیک‌شده اضافه کن
+                button.classList.add('active');
             });
-            // سپس به دکمه کلیک‌شده اضافه کن
-            button.classList.add('active');
         });
-    });
-</script>
+    </script>
+
+    <script>
+        document.querySelectorAll('.file-name').forEach(button => {
+            button.addEventListener('click', () => {
+                // اول کلاس active را از همه دکمه‌ها بردار
+                document.querySelectorAll('.file-name').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                // سپس به دکمه کلیک‌شده اضافه کن
+                button.classList.add('active');
+            });
+        });
+    </script>
+
+
+    <script>
+        var editor = CodeMirror(document.getElementById("code-editor-container"), {
+            value: "// کد خود را اینجا بنویسید یا ویرایش کنید\nconsole.log('سلام دنیا!');\n",
+            mode: "javascript", // می‌توانید به "css" یا "htmlmixed" تغییر دهید
+            theme: "monokai", // تم تاریک زیبا (می‌توانید "default" برای روشن بگذارید)
+            lineNumbers: true,
+            lineWrapping: true,
+            autoCloseBrackets: true,
+            matchBrackets: true,
+            indentUnit: 2,
+            tabSize: 2,
+            extraKeys: {
+                "Ctrl-Space": "autocomplete"
+            }
+        });
+    </script>
 </body>
 
 </html>

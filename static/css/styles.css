@@ -4,7 +4,7 @@ html {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-    background: #000000;
+    background: #595959;
 }
 
 .heder {
@@ -169,13 +169,30 @@ html {
     background: #f8f8f8;
 }
 
+.file-name.active {
+    background: #878787; /* رنگ وقتی فعال است */
+}
+
+
+
 
 .code-display {
     width: 70%;
-    overflow-y: auto;
-    padding: 20px;
-    background: #f8f8f8;
-    border-radius: 0 10px 10px 0;
+    padding: 0; /* padding را حذف کردیم چون CodeMirror خودش مدیریت می‌کند */
+}
+
+.CodeMirror {
+    height: 100%;
+    font-size: 16px;
+    font-family: 'Fira Code', 'Consolas', monospace; /* فونت بهتر برای کد */
+}
+
+.CodeMirror-scroll {
+    padding-bottom: 0 !important;
+}
+
+.CodeMirror {
+    height: 100% !important;
 }
 
 pre {
