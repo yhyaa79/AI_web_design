@@ -13,8 +13,8 @@
 
     <div class="heder">
         <div class="code-preview-heder">
-            <button class="code-heder">code</button>
-            <button class="preview-heder">preview</button>
+            <button class="code-heder tab-btn">code</button>
+            <button class="preview-heder tab-btn">preview</button>
         </div>
 
     </div>
@@ -70,7 +70,18 @@
     </div>
 
     <script src="./static/js/script.js"></script>
-
+<script>
+    document.querySelectorAll('.tab-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            // اول کلاس active را از همه دکمه‌ها بردار
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            // سپس به دکمه کلیک‌شده اضافه کن
+            button.classList.add('active');
+        });
+    });
+</script>
 </body>
 
 </html>
