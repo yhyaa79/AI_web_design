@@ -37,7 +37,7 @@ p {
     gap: 8px;
     position: absolute;
     top: 8px;
-    left: 88.5%;
+    right: 20px;
     background: #ffffff;
     border-radius: 15px;
     height: 30px;
@@ -55,7 +55,7 @@ p {
     gap: 8px;
     position: absolute;
     top: 8px;
-    left: 81%;
+    right: 135px;
     background: #ffffff;
     border-radius: 15px;
     height: 30px;
