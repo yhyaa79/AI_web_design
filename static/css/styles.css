@@ -42,17 +42,20 @@ html {
     height: 30px;
     border: none;
     cursor: pointer;
-    transition: background 0.3s ease; /* انیمیشن نرم */
+    transition: background 0.3s ease;
+    /* انیمیشن نرم */
     font-size: 14px;
     font-weight: 500;
 }
 
 .tab-btn:hover {
-    background: #d0d0d0; /* رنگ hover ملایم‌تر از active */
+    background: #d0d0d0;
+    /* رنگ hover ملایم‌تر از active */
 }
 
 .tab-btn.active {
-    background: #878787; /* رنگ وقتی فعال است */
+    background: #878787;
+    /* رنگ وقتی فعال است */
 }
 
 .container {
@@ -161,8 +164,15 @@ html {
     text-align: left;
 }
 
+.files-name {
+    padding: 0px 3px;
+    padding-bottom: 5px;
+    margin: 10px;
+    border-bottom: 1px solid #717171;
+}
+
 .file-name {
-    padding: 5px 10px;
+    padding: 3px 18px;
 }
 
 .file-name:hover {
@@ -170,7 +180,8 @@ html {
 }
 
 .file-name.active {
-    background: #878787; /* رنگ وقتی فعال است */
+    background: #878787;
+    /* رنگ وقتی فعال است */
 }
 
 
@@ -178,13 +189,16 @@ html {
 
 .code-display {
     width: 70%;
-    padding: 0; /* padding را حذف کردیم چون CodeMirror خودش مدیریت می‌کند */
+    padding: 0;
+    /* padding را حذف کردیم چون CodeMirror خودش مدیریت می‌کند */
 }
 
 .CodeMirror {
     height: 100%;
     font-size: 16px;
-    font-family: 'Fira Code', 'Consolas', monospace; /* فونت بهتر برای کد */
+    font-family: 'Fira Code', 'Consolas', monospace;
+    /* فونت بهتر برای کد */
+    border-radius: 0 10px 10px 0;
 }
 
 .CodeMirror-scroll {
