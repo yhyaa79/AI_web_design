@@ -18,8 +18,53 @@ html {
     background: #595959;
 }
 
+p {
+    margin: 0;
+}
+
+.p-btn {
+    margin: auto 0;
+    text-wrap-mode: nowrap;
+}
+
 .heder {
     height: 35px;
+}
+
+.download-btn {
+    display: flex;
+    padding: 0 10px;
+    gap: 8px;
+    position: absolute;
+    top: 8px;
+    left: 88.5%;
+    background: #ffffff;
+    border-radius: 15px;
+    height: 30px;
+    border: none;
+    transition: background 0.2s ease;
+}
+
+.download-btn:hover {
+    background: #d0d0d0;
+}
+
+.login-btn {
+    display: flex;
+    padding: 0 10px;
+    gap: 8px;
+    position: absolute;
+    top: 8px;
+    left: 81%;
+    background: #ffffff;
+    border-radius: 15px;
+    height: 30px;
+    border: none;
+    transition: background 0.2s ease;
+}
+
+.login-btn:hover {
+    background: #d0d0d0;
 }
 
 .code-preview-heder {
@@ -53,7 +98,7 @@ html {
     height: 30px;
     border: none;
     cursor: pointer;
-    transition: background 0.3s ease;
+    transition: background 0.2s ease;
     /* انیمیشن نرم */
     font-size: 14px;
     font-weight: 500;
@@ -95,7 +140,7 @@ html {
     padding: 20px;
     margin-bottom: 10px;
     border-radius: 10px;
-    background: #f8f8f8;
+    background: #dedede;
     min-height: 100px;
 }
 
@@ -125,7 +170,13 @@ html {
     border-radius: 50%;
     border: none;
     padding: 2px;
+    transition: background 0.2s ease;
 }
+
+.send-message:hover {
+    background: #d0d0d0;
+}
+
 
 .model-select {
     height: 25px;
@@ -174,12 +225,16 @@ html {
 .files-display {
     width: 30%;
     overflow-y: auto;
-    background: #c5c3c3;
+    background: #dedede;
     border-radius: 10px 0 0 10px;
     text-align: left;
+    direction: ltr;
 }
 
 .files-name {
+    display: flex;
+    padding: 0 10px;
+    gap: 5px;
     padding: 0px 3px;
     padding-bottom: 5px;
     margin: 10px;
@@ -187,7 +242,12 @@ html {
 }
 
 .file-name {
-    padding: 3px 18px;
+    display: flex;
+    padding: 0 10px;
+    gap: 5px;
+    padding: 2px 18px;
+    font-size: 15px;
+    transition: background 0.2s ease;
 }
 
 .file-name:hover {
@@ -202,6 +262,7 @@ html {
 .icon-files {
     display: inline-flex;
     gap: 5px;
+    margin: auto 0;
 }
 
 .code-display {
