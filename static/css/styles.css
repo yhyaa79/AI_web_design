@@ -13,8 +13,31 @@ html {
 
 .code-preview-heder {
     position: absolute;
-    top: 13px;
+    top: 8px;
     left: 41%;
+    background: #ffffff;
+    border-radius: 15px;
+}
+
+.code-heder {
+    background: #ffffff;
+    border-radius: 15px;
+    width: 65px;
+    height: 30px;
+    border: none;
+}
+
+.preview-heder {
+    background: #ffffff;
+    border-radius: 15px;
+    width: 65px;
+    height: 30px;
+    border: none;
+}
+
+.code-heder:hover,
+.preview-heder:hover {
+    background: #878787;
 }
 
 .container {
@@ -120,7 +143,7 @@ html {
     overflow-y: auto;
     background: #c5c3c3;
     border-radius: 10px 0 0 10px;
-        text-align: left;
+    text-align: left;
 }
 
 .file-name {
