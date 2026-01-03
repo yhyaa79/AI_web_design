@@ -96,5 +96,28 @@ def history():
     ]
     return jsonify({'messages': history, 'username': user.username})
 
+
+
+@app.route('/clear_chat', methods=['POST'])
+def clear_chat():
+    ip = request.remote_addr
+    user = User.query.filter_by(ip_address=ip).first()
+    
+    if not user:
+        return jsonify({'status': 'error', 'message': 'کاربری یافت نشد'}), 404
+
+    try:
+        # حذف تمام پیام‌های کاربر
+        Message.query.filter_by(user_id=user.id).delete()
+        db.session.commit()
+        
+        return jsonify({'status': 'success', 'message': 'تمام مکالمات با موفقیت پاک شد'})
+    
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'status': 'error', 'message': 'خطا در پاک کردن مکالمات'}), 500
+    
+    
+
 if __name__ == '__main__':
     app.run(debug=True)
