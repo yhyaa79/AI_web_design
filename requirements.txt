@@ -1,0 +1,5 @@
+install 
+flask 
+mysql-connector-python 
+flask-sqlalchemy 
+python-dotenv
