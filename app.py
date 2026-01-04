@@ -93,17 +93,51 @@ def generate_username():
     return f"Guest_{random_part}"
 
 def get_or_create_user(ip):
-    """بر اساس IP کاربر رو پیدا یا ایجاد کن"""
     user = User.query.filter_by(ip_address=ip).first()
     if not user:
         username = generate_username()
-        # مطمئن شو نام کاربری تکراری نباشه
         while User.query.filter_by(username=username).first():
             username = generate_username()
         
         user = User(ip_address=ip, username=username)
         db.session.add(user)
         db.session.commit()
+
+        # ساخت فولدر و فایل‌های پیش‌فرض برای کاربر جدید
+        user_folder = PROJECTS_DIR / username
+        user_folder.mkdir(exist_ok=True)
+
+        # فایل index.html پیش‌فرض
+        (user_folder / "index.html").write_text("""<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سایت من</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>سلام! این سایت شما است</h1>
+    <p>با هوش مصنوعی آن را طراحی کنید.</p>
+    <script src="script.js"></script>
+</body>
+</html>""", encoding='utf-8')
+
+        # فایل style.css پیش‌فرض
+        (user_folder / "style.css").write_text("""body {
+    font-family: 'Vazir', sans-serif;
+    background: #f0f0f0;
+    text-align: center;
+    padding: 50px;
+}
+
+h1 {
+    color: #333;
+}""", encoding='utf-8')
+
+        # فایل script.js پیش‌فرض
+        (user_folder / "script.js").write_text("""console.log("سایت آماده است!");""", encoding='utf-8')
+
     return user
 
 @app.route('/')
