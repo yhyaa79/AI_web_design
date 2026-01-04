@@ -114,6 +114,24 @@ p {
     /* رنگ وقتی فعال است */
 }
 
+.new-btn {
+    display: flex;
+    padding: 0 10px;
+    gap: 8px;
+    position: absolute;
+    top: 8px;
+    left: 30px;
+    background: #ffffff;
+    border-radius: 15px;
+    height: 30px;
+    border: none;
+    transition: background 0.2s ease;
+}
+
+.new-btn:hover {
+    background: #d0d0d0;
+}
+
 .container {
     display: flex;
     height: 95vh;
