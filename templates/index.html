@@ -75,15 +75,7 @@
         <!-- سمت راست: قسمت چت (در rtl راست است) -->
         <div class="chat-section">
             <div class="messages show-message">
-                <div class="message"></div>
-                <div class="message"></div>
-                <div class="message"></div>
-                <div class="message"></div>
-                <div class="message"></div>
-                <div class="message"></div>
-                <div class="message"></div>
-                <div class="message"></div>
-                <div class="message"></div>
+                <div class="message">به یییی</div>
             </div>
 
             <div class="input-area write-text">
@@ -107,8 +99,9 @@
             </div>
         </div>
 
-        <!-- سمت چپ: نمایش کد -->
+        <!-- سمت چپ: نمایش کد و پیش‌نمایش -->
         <div class="code-section">
+            <!-- لیست فایل‌ها همیشه نمایش داده می‌شود -->
             <div class="files-display">
                 <div class="files-name">
                     <div class="icon-files">
@@ -121,43 +114,27 @@
                     <p class="p-btn">files</p>
                 </div>
                 <div>
-                    <!--                     <div class="file-name">
-                        <div class="icon-files">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                class="bi bi-file-earmark-text" viewBox="0 0 16 16">
-                                <path
-                                    d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5" />
-                                <path
-                                    d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z" />
-                            </svg>
-                        </div>
-                        <p class="p-btn">index.html</p>
-                    </div>
-
-                    <div class="file-name">
-                        <div class="icon-files">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                class="bi bi-file-earmark-text" viewBox="0 0 16 16">
-                                <path
-                                    d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5" />
-                                <path
-                                    d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z" />
-                            </svg>
-                        </div>
-                        <p class="p-btn">style.css</p>
-                    </div> -->
+                    <!-- لیست فایل‌ها اینجا توسط جاوااسکریپت اضافه می‌شود -->
                 </div>
             </div>
 
+            <!-- قسمت ویرایشگر کد -->
             <div class="code-display codes-show-code" id="code-editor-container">
-                <!-- اینجا CodeMirror لود می‌شود -->
+                <!-- CodeMirror اینجا لود می‌شود -->
+            </div>
+
+            <!-- قسمت پیش‌نمایش (iframe) -->
+            <div class="preview-container" id="preview-container" style="display: none; height: 100%; width: 100%;">
+                <iframe id="preview-iframe" sandbox="allow-scripts allow-modals allow-popups allow-same-origin"
+                    style="width: 100%; height: 100%; border: none; background: white;">
+                </iframe>
             </div>
         </div>
     </div>
-
+    <script src="./static/js/file.js"></script>
     <script src="./static/js/script.js"></script>
     <script src="./static/js/chat.js"></script>
-    <script src="./static/js/file.js"></script>
+
 
 </body>
 

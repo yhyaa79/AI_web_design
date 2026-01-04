@@ -222,6 +222,10 @@ p {
     flex-direction: row-reverse;
 }
 
+#preview-iframe {
+    border-radius: 10px;
+}
+
 .code-tabs {
     display: flex;
     background: #f0f0f0;

@@ -1,4 +1,4 @@
-const sendButton = document.querySelector('.send-message');
+
 const textarea = document.querySelector('.write-message');
 const messagesContainer = document.querySelector('.messages');
 

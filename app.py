@@ -236,5 +236,63 @@ def get_user_files():
     return jsonify({'files': sorted(files)})
 
 
+@app.route('/get_file/<filename>')
+def get_file(filename):
+    ip = request.remote_addr
+    user = User.query.filter_by(ip_address=ip).first()
+    if not user:
+        return "کاربر یافت نشد", 404
+    
+    user_folder = PROJECTS_DIR / user.username
+    file_path = user_folder / filename
+    
+    if not file_path.exists() or not file_path.is_file():
+        return "فایل یافت نشد", 404
+    
+    if filename.endswith('.html'):
+        mimetype = 'text/html'
+    elif filename.endswith('.css'):
+        mimetype = 'text/css'
+    elif filename.endswith('.js'):
+        mimetype = 'text/javascript'
+    else:
+        mimetype = 'text/plain'
+    
+    return file_path.read_text(encoding='utf-8'), 200, {'Content-Type': mimetype}
+
+
+
+@app.route('/preview')
+def preview():
+    ip = request.remote_addr
+    user = User.query.filter_by(ip_address=ip).first()
+    if not user:
+        return "کاربر یافت نشد", 404
+    
+    user_folder = PROJECTS_DIR / user.username
+    index_path = user_folder / 'index.html'
+    
+    if not index_path.exists():
+        return "<h1>فایل index.html وجود ندارد</h1>", 404
+    
+    html = index_path.read_text(encoding='utf-8')
+    
+    # Inline کردن style.css اگر وجود داشت
+    css_path = user_folder / 'style.css'
+    if css_path.exists() and '<link rel="stylesheet" href="style.css">' in html:
+        css_content = css_path.read_text(encoding='utf-8')
+        html = html.replace('<link rel="stylesheet" href="style.css">', 
+                            f'<style>\n{css_content}\n</style>')
+    
+    # Inline کردن script.js اگر وجود داشت
+    js_path = user_folder / 'script.js'
+    if js_path.exists() and '<script src="script.js"></script>' in html:
+        js_content = js_path.read_text(encoding='utf-8')
+        html = html.replace('<script src="script.js"></script>', 
+                            f'<script>\n{js_content}\n</script>')
+    
+    return html, 200, {'Content-Type': 'text/html; charset=utf-8'}
+
+
 if __name__ == '__main__':
     app.run(debug=True)
