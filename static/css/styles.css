@@ -67,6 +67,26 @@ p {
     background: #d0d0d0;
 }
 
+
+.zoom-in-btn {
+    display: flex;
+    padding: 0 10px;
+    gap: 8px;
+    position: absolute;
+    top: 8px;
+    left: 32%;
+    background: #ffffff;
+    border-radius: 15px;
+    height: 30px;
+    border: none;
+    transition: background 0.2s ease;
+}
+
+.zoom-in-btn:hover {
+    background: #d0d0d0;
+}
+
+
 .code-preview-heder {
     position: absolute;
     top: 8px;
@@ -140,7 +160,7 @@ p {
 }
 
 .chat-section {
-    width: 40%;
+    width: 30%;
     display: flex;
     flex-direction: column;
 }
@@ -216,7 +236,7 @@ p {
 
 .code-section {
     margin: 10px;
-    width: 60%;
+    width: 70%;
     display: flex;
     /* height: 100vh; */
     flex-direction: row-reverse;
@@ -245,7 +265,7 @@ p {
 }
 
 .files-display {
-    width: 30%;
+    width: 160px;
     overflow-y: auto;
     background: #dedede;
     border-radius: 10px 0 0 10px;
@@ -288,7 +308,7 @@ p {
 }
 
 .code-display {
-    width: 70%;
+    width: 100%;
     padding: 0;
     /* padding را حذف کردیم چون CodeMirror خودش مدیریت می‌کند */
 }
@@ -311,4 +331,56 @@ p {
 
 pre {
     white-space: pre-wrap;
+}
+
+
+/* بهبود ظاهر CodeMirror */
+.code-display .CodeMirror {
+    height: 100%;
+    font-size: 15px; /* اندازه فونت مناسب */
+    font-family: 'Fira Code', 'Vazir', Consolas, Monaco, 'Courier New', monospace;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* خطوط فعال و انتخاب شده */
+.code-display .CodeMirror-focused .CodeMirror-selected {
+    background: #414a6b !important;
+}
+
+.code-display .CodeMirror-line::selection,
+.code-display .CodeMirror-line > span::selection,
+.code-display .CodeMirror-line > span > span::selection {
+    background: #414a6b;
+}
+
+/* اسکرول‌بار زیبا (فقط در مرورگرهای کرومیوم) */
+.code-display .CodeMirror-scrollbar::-webkit-scrollbar {
+    width: 10px;
+}
+
+.code-display .CodeMirror-scrollbar::-webkit-scrollbar-track {
+    background: #2d2d42;
+    border-radius: 10px;
+}
+
+.code-display .CodeMirror-scrollbar::-webkit-scrollbar-thumb {
+    background: #6272a4;
+    border-radius: 10px;
+}
+
+.code-display .CodeMirror-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #7d8cc4;
+}
+
+/* خط جاری فعال */
+.code-display .CodeMirror-activeline-background {
+    background: #2d2d42 !important;
+}
+
+/* گاتر (شماره خطوط) */
+.code-display .CodeMirror-gutters {
+    background-color: #282a36;
+    border-right: 1px solid #44475a;
 }

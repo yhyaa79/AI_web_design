@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // راه‌اندازی CodeMirror
     editor = CodeMirror(document.getElementById("code-editor-container"), {
         mode: "htmlmixed",
-        theme: "monokai",
+        theme: "dracula",
         lineNumbers: true,
         lineWrapping: true,
         autoCloseBrackets: true,
