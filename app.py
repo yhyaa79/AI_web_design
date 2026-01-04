@@ -6,9 +6,72 @@ from database import create_database_if_not_exists
 from models import db, User, Message
 import secrets
 import string
+from chat_bot import get_ai_response, SYSTEM_PROMPT
 
 app = Flask(__name__)
 app.secret_key = 'your_very_secret_key_here'  # حتماً تغییر بده
+
+
+import os
+from pathlib import Path
+
+# مسیر اصلی ذخیره پروژه‌های کاربران
+PROJECTS_DIR = Path("user_projects")
+PROJECTS_DIR.mkdir(exist_ok=True)
+
+def get_user_folder(username):
+    """فولدر اختصاصی کاربر رو برگردون یا بساز"""
+    user_folder = PROJECTS_DIR / username
+    user_folder.mkdir(exist_ok=True)
+    return user_folder
+
+def extract_and_save_code(ai_response, username):
+    """استخراج کد + برگرداندن فقط متن توضیحی برای نمایش در چت"""
+    user_folder = get_user_folder(username)
+    
+    files_saved = []
+    current_file = None
+    current_content = []
+    in_code_block = False
+
+    text_parts = []  # فقط متن عادی (برای نمایش در چت)
+    lines = ai_response.split('\n')
+
+    for line in lines:
+        stripped = line.strip()
+
+        if stripped.startswith('```'):
+            if in_code_block:
+                # پایان بلوک کد → ذخیره فایل
+                if current_file:
+                    file_path = user_folder / current_file
+                    content_to_save = '\n'.join(current_content).strip()
+                    if content_to_save:  # فقط اگر محتوا داشت
+                        file_path.write_text(content_to_save + '\n', encoding='utf-8')
+                        files_saved.append(current_file)
+                in_code_block = False
+                current_file = None
+                current_content = []
+            else:
+                # شروع بلوک کد
+                in_code_block = True
+                potential_filename = stripped[3:].strip()
+                if potential_filename:
+                    current_file = potential_filename
+                else:
+                    current_file = "unnamed.txt"
+        elif in_code_block:
+            current_content.append(line)
+        else:
+            # متن عادی → برای نمایش در چت
+            text_parts.append(line)
+
+    clean_text = '\n'.join(text_parts).strip()
+    if not clean_text:
+        clean_text = "فایل‌های جدید با موفقیت ساخته/به‌روزرسانی شدند!"
+
+    return clean_text, files_saved
+
 
 # تنظیمات SQLAlchemy
 app.config['SQLALCHEMY_DATABASE_URI'] = (
@@ -54,32 +117,38 @@ def chat():
     if not message_text:
         return jsonify({'error': 'پیام خالی است'}), 400
 
-    # دریافت IP کاربر
     ip = request.remote_addr
-    
-    # اگر در محیط توسعه با پراکسی هستی (مثل nginx)، این رو فعال کن:
-    # if request.headers.get('X-Forwarded-For'):
-    #     ip = request.headers.get('X-Forwarded-For').split(',')[0].strip()
-
     user = get_or_create_user(ip)
 
     # ذخیره پیام کاربر
     user_msg = Message(user_id=user.id, role='user', content=message_text)
     db.session.add(user_msg)
+    db.session.commit()
 
-    # اینجا باید پاسخ AI رو بگیری (مثلاً از Grok یا OpenAI)
-    # فعلاً یک پاسخ نمونه می‌ذارم
-    assistant_reply = f"شما گفتید: {message_text}\nاین یک پاسخ آزمایشی از AI است."
+    # ساخت history
+    messages = Message.query.filter_by(user_id=user.id).order_by(Message.timestamp).all()
+    history = [{"role": msg.role, "content": msg.content} for msg in messages]
 
-    assistant_msg = Message(user_id=user.id, role='assistant', content=assistant_reply)
+    # اضافه کردن system prompt فقط یک بار
+    if len(history) == 1:
+        history.insert(0, {"role": "system", "content": SYSTEM_PROMPT})
+
+    # دریافت پاسخ AI
+    ai_response = get_ai_response(history)
+
+    # جدا کردن متن و ذخیره کدها
+    display_text, new_files = extract_and_save_code(ai_response, user.username)
+
+    # ذخیره فقط متن توضیحی در دیتابیس (نه کد کامل)
+    assistant_msg = Message(user_id=user.id, role='assistant', content=display_text)
     db.session.add(assistant_msg)
-
     db.session.commit()
 
     return jsonify({
         'username': user.username,
         'user_message': message_text,
-        'assistant_message': assistant_reply
+        'assistant_message': display_text,  # فقط متن توضیحی
+        'new_files': new_files  # فایل‌های جدید/به‌روزشده
     })
 
 @app.route('/history')
@@ -117,7 +186,21 @@ def clear_chat():
         db.session.rollback()
         return jsonify({'status': 'error', 'message': 'خطا در پاک کردن مکالمات'}), 500
     
+
+@app.route('/get_files')
+def get_user_files():
+    ip = request.remote_addr
+    user = User.query.filter_by(ip_address=ip).first()
+    if not user:
+        return jsonify({'files': []})
     
+    user_folder = PROJECTS_DIR / user.username
+    if not user_folder.exists():
+        return jsonify({'files': []})
+    
+    files = [f.name for f in user_folder.iterdir() if f.is_file()]
+    return jsonify({'files': sorted(files)})
+
 
 if __name__ == '__main__':
     app.run(debug=True)
