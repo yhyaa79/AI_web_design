@@ -57,7 +57,6 @@
             </button>
         </div>
 
-
         <button class="clear-chat-btn new-btn" id="clear-chat-btn">
             <p class="p-btn">new</p>
             <div class="icon-files">
@@ -69,7 +68,6 @@
                 </svg>
             </div>
         </button>
-
 
     </div>
 
@@ -158,24 +156,9 @@
     </div>
 
     <script src="./static/js/script.js"></script>
+    <script src="./static/js/chat.js"></script>
+    <script src="./static/js/file.js"></script>
 
-
-    <script>
-        var editor = CodeMirror(document.getElementById("code-editor-container"), {
-            value: "// کد خود را اینجا بنویسید یا ویرایش کنید\nconsole.log('سلام دنیا!');\n",
-            mode: "javascript", // می‌توانید به "css" یا "htmlmixed" تغییر دهید
-            theme: "monokai", // تم تاریک زیبا (می‌توانید "default" برای روشن بگذارید)
-            lineNumbers: true,
-            lineWrapping: true,
-            autoCloseBrackets: true,
-            matchBrackets: true,
-            indentUnit: 2,
-            tabSize: 2,
-            extraKeys: {
-                "Ctrl-Space": "autocomplete"
-            }
-        });
-    </script>
 </body>
 
 </html>
