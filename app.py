@@ -149,6 +149,8 @@ def index():
 def chat():
     data = request.get_json()
     message_text = data.get('message', '').strip()
+    selected_model = data.get('model', 'gpt-4o-mini')  # مدل پیش‌فرض اگر ارسال نشده باشد
+
     if not message_text:
         return jsonify({'error': 'پیام خالی است'}), 400
 
@@ -168,13 +170,13 @@ def chat():
     if len(history) == 1:
         history.insert(0, {"role": "system", "content": SYSTEM_PROMPT})
 
-    # دریافت پاسخ AI
-    ai_response = get_ai_response(history)
+    # دریافت پاسخ AI با مدل انتخاب‌شده توسط کاربر
+    ai_response = get_ai_response(history, selected_model)  # اینجا model را پاس می‌دهیم
 
     # جدا کردن متن و ذخیره کدها
     display_text, new_files = extract_and_save_code(ai_response, user.username)
 
-    # ذخیره فقط متن توضیحی در دیتابیس (نه کد کامل)
+    # ذخیره فقط متن توضیحی در دیتابیس
     assistant_msg = Message(user_id=user.id, role='assistant', content=display_text)
     db.session.add(assistant_msg)
     db.session.commit()
@@ -182,8 +184,8 @@ def chat():
     return jsonify({
         'username': user.username,
         'user_message': message_text,
-        'assistant_message': display_text,  # فقط متن توضیحی
-        'new_files': new_files  # فایل‌های جدید/به‌روزشده
+        'assistant_message': display_text,
+        'new_files': new_files
     })
 
 @app.route('/history')

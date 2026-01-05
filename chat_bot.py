@@ -9,7 +9,7 @@ load_dotenv()
 API_KEY_OPENROUTER = os.getenv("API_KEY_OPENROUTER")
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
 
-def get_ai_response(messages):
+def get_ai_response(messages, model):
     """
     ارسال پیام‌ها به OpenRouter و دریافت پاسخ AI
     """
@@ -21,7 +21,7 @@ def get_ai_response(messages):
     }
 
     payload = {
-        "model": "anthropic/claude-3.5-sonnet",  # یا هر مدلی که می‌خوای (مثل openai/gpt-4o)
+        "model": model,  
         "messages": messages,
         "temperature": 0.7,
         "max_tokens": 4096
