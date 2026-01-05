@@ -210,16 +210,31 @@ def clear_chat():
         return jsonify({'status': 'error', 'message': 'کاربری یافت نشد'}), 404
 
     try:
-        # حذف تمام پیام‌های کاربر
+        # حذف تمام پیام‌های کاربر از دیتابیس
         Message.query.filter_by(user_id=user.id).delete()
         db.session.commit()
         
-        return jsonify({'status': 'success', 'message': 'تمام مکالمات با موفقیت پاک شد'})
+        # مسیر فولدر کاربر
+        user_folder = PROJECTS_DIR / user.username
+        
+        # اگر فولدر وجود داشت، تمام فایل‌های داخلش را حذف کن
+        if user_folder.exists() and user_folder.is_dir():
+            for file_path in user_folder.iterdir():
+                if file_path.is_file():
+                    file_path.unlink()  # حذف فایل
+                elif file_path.is_dir():
+                    # اگر زیرپوشه‌ای بود (که معمولاً نیست، اما برای ایمنی)
+                    import shutil
+                    shutil.rmtree(file_path)
+        
+        return jsonify({
+            'status': 'success', 
+            'message': 'تمام مکالمات و فایل‌های پروژه با موفقیت پاک شد و پروژه پیش‌فرض بازسازی شد.'
+        })
     
     except Exception as e:
         db.session.rollback()
-        return jsonify({'status': 'error', 'message': 'خطا در پاک کردن مکالمات'}), 500
-    
+        return jsonify({'status': 'error', 'message': 'خطا در پاک کردن مکالمات یا فایل‌ها'}), 500    
 
 @app.route('/get_files')
 def get_user_files():
