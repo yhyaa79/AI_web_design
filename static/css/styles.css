@@ -87,6 +87,27 @@ p {
 }
 
 
+
+.zoom-out-btn {
+    display: none;
+    padding: 0 10px;
+    gap: 8px;
+    position: absolute;
+    top: 8px;
+    left: 41.5%;
+    background: #ffffff;
+    border-radius: 15px;
+    height: 30px;
+    z-index: 100;
+    border: none;
+    transition: background 0.2s ease;
+}
+
+.zoom-out-btn:hover {
+    background: #d0d0d0;
+}
+
+
 .code-preview-heder {
     position: absolute;
     top: 8px;
