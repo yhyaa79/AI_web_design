@@ -22,4 +22,3 @@ document.querySelectorAll('.file-name').forEach(button => {
         button.classList.add('active');
     });
 });
-

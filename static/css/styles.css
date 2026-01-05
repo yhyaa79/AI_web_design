@@ -93,8 +93,9 @@ p {
     padding: 0 10px;
     gap: 8px;
     position: absolute;
-    top: 8px;
-    left: 41.5%;
+    top: 15px;
+    right: 20px;
+    opacity: 0.4;
     background: #ffffff;
     border-radius: 15px;
     height: 30px;

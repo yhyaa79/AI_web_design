@@ -1,5 +1,5 @@
 # app.py
-from flask import Flask, render_template, request, jsonify, session
+from flask import Flask, render_template, request, jsonify, session, send_file
 import mysql.connector
 from config import DATABASE_CONFIG, DATABASE_NAME
 from database import create_database_if_not_exists
@@ -7,6 +7,9 @@ from models import db, User, Message
 import secrets
 import string
 from chat_bot import get_ai_response, SYSTEM_PROMPT
+import zipfile
+from io import BytesIO
+
 
 app = Flask(__name__)
 app.secret_key = 'your_very_secret_key_here'  # حتماً تغییر بده
@@ -109,31 +112,31 @@ def get_or_create_user(ip):
 
         # فایل index.html پیش‌فرض
         (user_folder / "index.html").write_text("""<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سایت من</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <h1>سلام! این سایت شما است</h1>
-    <p>با هوش مصنوعی آن را طراحی کنید.</p>
-    <script src="script.js"></script>
-</body>
-</html>""", encoding='utf-8')
+            <html lang="fa" dir="rtl">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>سایت من</title>
+                <link rel="stylesheet" href="style.css">
+            </head>
+            <body>
+                <h1>سلام! این سایت شما است</h1>
+                <p>با هوش مصنوعی آن را طراحی کنید.</p>
+                <script src="script.js"></script>
+            </body>
+            </html>""", encoding='utf-8')
 
         # فایل style.css پیش‌فرض
         (user_folder / "style.css").write_text("""body {
-    font-family: 'Vazir', sans-serif;
-    background: #f0f0f0;
-    text-align: center;
-    padding: 50px;
-}
+            font-family: 'Vazir', sans-serif;
+            background: #f0f0f0;
+            text-align: center;
+            padding: 50px;
+        }
 
-h1 {
-    color: #333;
-}""", encoding='utf-8')
+        h1 {
+            color: #333;
+        }""", encoding='utf-8')
 
 
     return user
@@ -349,6 +352,38 @@ def save_file():
     except Exception as e:
         return jsonify({'status': 'error', 'message': 'خطا در ذخیره فایل'}), 500
 
+
+
+
+@app.route('/download_project')
+def download_project():
+    ip = request.remote_addr
+    user = User.query.filter_by(ip_address=ip).first()
+    if not user:
+        return jsonify({'error': 'کاربر یافت نشد'}), 404
+
+    user_folder = PROJECTS_DIR / user.username
+    
+    if not user_folder.exists() or not any(user_folder.iterdir()):
+        return jsonify({'error': 'پروژه خالی است یا وجود ندارد'}), 400
+
+    # ساخت ZIP در حافظه (بدون ذخیره روی دیسک)
+    memory_file = BytesIO()
+    with zipfile.ZipFile(memory_file, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        for file_path in user_folder.rglob('*'):  # همه فایل‌ها و زیرپوشه‌ها
+            if file_path.is_file():
+                # مسیر نسبی داخل ZIP (بدون پیشوند user_projects/username)
+                arcname = str(file_path.relative_to(PROJECTS_DIR.parent))
+                zipf.write(file_path, arcname)
+
+    memory_file.seek(0)
+
+    return send_file(
+        memory_file,
+        mimetype='application/zip',
+        as_attachment=True,
+        download_name=f"{user.username}_project.zip"
+    )
 
 if __name__ == '__main__':
     app.run(debug=True)
