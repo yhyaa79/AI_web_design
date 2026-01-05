@@ -74,7 +74,7 @@ p {
     gap: 8px;
     position: absolute;
     top: 8px;
-    left: 32%;
+    left: 41.5%;
     background: #ffffff;
     border-radius: 15px;
     height: 30px;
@@ -90,7 +90,7 @@ p {
 .code-preview-heder {
     position: absolute;
     top: 8px;
-    left: 41%;
+    left: 31%;
     background: #ffffff;
     border-radius: 15px;
 }
@@ -133,6 +133,26 @@ p {
     background: #878787;
     /* رنگ وقتی فعال است */
 }
+
+.save-file-btn {
+    display: flex;
+    padding: 0 10px;
+    gap: 8px;
+    position: absolute;
+    top: 8px;
+    left: 48%;
+    background: #ffffff;
+    border-radius: 15px;
+    height: 30px;
+    border: none;
+    transition: background 0.2s ease;
+}
+
+.save-file-btn:hover {
+    background: #d0d0d0;
+    /* رنگ hover ملایم‌تر از active */
+}
+
 
 .new-btn {
     display: flex;
@@ -296,6 +316,10 @@ p {
     background: #afafaf;
 }
 
+.file-name.active-file {
+    background: #949494;
+}
+
 .file-name.active {
     background: #949494;
     /* رنگ وقتی فعال است */
@@ -345,7 +369,7 @@ pre {
 
 /* خطوط فعال و انتخاب شده */
 .code-display .CodeMirror-focused .CodeMirror-selected {
-    background: #414a6b !important;
+    background: #b3d7fe !important;
 }
 
 .code-display .CodeMirror-line::selection,

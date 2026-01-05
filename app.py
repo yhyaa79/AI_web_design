@@ -294,5 +294,29 @@ def preview():
     return html, 200, {'Content-Type': 'text/html; charset=utf-8'}
 
 
+@app.route('/save_file', methods=['POST'])
+def save_file():
+    ip = request.remote_addr
+    user = User.query.filter_by(ip_address=ip).first()
+    if not user:
+        return jsonify({'status': 'error', 'message': 'کاربر یافت نشد'}), 404
+
+    data = request.get_json()
+    filename = data.get('filename')
+    content = data.get('content', '')
+
+    if not filename:
+        return jsonify({'status': 'error', 'message': 'نام فایل الزامی است'}), 400
+
+    user_folder = PROJECTS_DIR / user.username
+    file_path = user_folder / filename
+
+    try:
+        file_path.write_text(content + '\n', encoding='utf-8')
+        return jsonify({'status': 'success', 'message': f'فایل {filename} با موفقیت ذخیره شد'})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': 'خطا در ذخیره فایل'}), 500
+
+
 if __name__ == '__main__':
     app.run(debug=True)
