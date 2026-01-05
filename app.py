@@ -135,8 +135,6 @@ h1 {
     color: #333;
 }""", encoding='utf-8')
 
-        # فایل script.js پیش‌فرض
-        (user_folder / "script.js").write_text("""console.log("سایت آماده است!");""", encoding='utf-8')
 
     return user
 
@@ -288,7 +286,26 @@ def preview():
     index_path = user_folder / 'index.html'
     
     if not index_path.exists():
-        return "<h1>فایل index.html وجود ندارد</h1>", 404
+        info_html = """
+        <div style="text-align: center; max-width: 700px; margin: 0 auto; padding: 20px;">
+            <p style="font-size: 1.35em; line-height: 1.8; color: #333; margin: 20px 0;">
+                این صفحه پیش‌نمایش زنده‌ی سایت شماست.
+            </p>
+            
+            <p style="font-size: 1.35em; line-height: 1.8; color: #333; margin: 20px 0;">
+                همین حالا با هوش مصنوعی چت کنید، بگید چه سایتی می‌خواهید بسازید،<br>
+                و تغییرات را لحظه‌ای اینجا ببینید.
+            </p>
+            
+            <p style="font-size: 1.15em; line-height: 1.7; color: #555; margin: 30px 0 0 0;">
+                هر وقت آماده بودید، فقط بگویید «پیش‌نمایش رو ببینم»<br>
+                یا مستقیم کد <code style="background:#f0f0f0; padding:2px 8px; border-radius:4px;">HTML</code>، 
+                <code style="background:#f0f0f0; padding:2px 8px; border-radius:4px;">CSS</code> و 
+                <code style="background:#f0f0f0; padding:2px 8px; border-radius:4px;">JS</code> را بخواهید.
+            </p>
+        </div>
+        """
+        return info_html, 200, {'Content-Type': 'text/html; charset=utf-8'}
     
     html = index_path.read_text(encoding='utf-8')
     
