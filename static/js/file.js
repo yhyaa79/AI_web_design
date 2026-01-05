@@ -8,6 +8,8 @@ const filesContainer = document.querySelector('.files-display > div:nth-child(2)
 // متغیر برای CodeMirror
 let editor;
 
+
+
 // تابع اضافه کردن پیام به چت
 function addMessage(role, content) {
     const div = document.createElement('div');
@@ -151,8 +153,9 @@ textarea.addEventListener('keypress', e => {
 document.addEventListener('DOMContentLoaded', () => {
     // راه‌اندازی CodeMirror
     editor = CodeMirror(document.getElementById("code-editor-container"), {
+        value: "فایل مورد نظر خود را از نوار کناری انتخاب کنید",
         mode: "htmlmixed",
-        theme: "dracula",
+        theme: "default",
         lineNumbers: true,
         lineWrapping: true,
         autoCloseBrackets: true,

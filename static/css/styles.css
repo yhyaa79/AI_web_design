@@ -379,7 +379,11 @@ pre {
 }
 
 /* گاتر (شماره خطوط) */
-.code-display .CodeMirror-gutters {
+/* .code-display .CodeMirror-gutters {
     background-color: #282a36;
     border-right: 1px solid #44475a;
+} */
+
+.cm-s-dracula.CodeMirror {
+    background-color: #0a26c5 !important;
 }
