@@ -110,7 +110,7 @@ def get_or_create_user(ip):
         user_folder = PROJECTS_DIR / username
         user_folder.mkdir(exist_ok=True)
 
-        # فایل index.html پیش‌فرض
+        # بازسازی فایل‌های پیش‌فرض
         (user_folder / "index.html").write_text("""<!DOCTYPE html>
             <html lang="fa" dir="rtl">
             <head>
@@ -126,18 +126,15 @@ def get_or_create_user(ip):
             </body>
             </html>""", encoding='utf-8')
 
-        # فایل style.css پیش‌فرض
         (user_folder / "style.css").write_text("""body {
-            font-family: 'Vazir', sans-serif;
-            background: #f0f0f0;
-            text-align: center;
-            padding: 50px;
-        }
-
-        h1 {
-            color: #333;
-        }""", encoding='utf-8')
-
+                font-family: 'Vazir', sans-serif;
+                background: #f0f0f0;
+                text-align: center;
+                padding: 50px;
+            }
+            h1 {
+                color: #333;
+            }""", encoding='utf-8')
 
     return user
 
@@ -149,8 +146,7 @@ def index():
 def chat():
     data = request.get_json()
     message_text = data.get('message', '').strip()
-    selected_model = data.get('model', 'gpt-4o-mini')  # مدل پیش‌فرض اگر ارسال نشده باشد
-
+    selected_model = data.get('model', 'gpt-4o-mini')
     if not message_text:
         return jsonify({'error': 'پیام خالی است'}), 400
 
@@ -162,18 +158,37 @@ def chat():
     db.session.add(user_msg)
     db.session.commit()
 
-    # ساخت history
+    # ساخت history پایه از دیتابیس (شامل پیام جدید کاربر)
     messages = Message.query.filter_by(user_id=user.id).order_by(Message.timestamp).all()
     history = [{"role": msg.role, "content": msg.content} for msg in messages]
 
-    # اضافه کردن system prompt فقط یک بار
-    if len(history) == 1:
-        history.insert(0, {"role": "system", "content": SYSTEM_PROMPT})
+    # همیشه SYSTEM_PROMPT را اول بگذار
+    history.insert(0, {"role": "system", "content": SYSTEM_PROMPT})
 
-    # دریافت پاسخ AI با مدل انتخاب‌شده توسط کاربر
-    ai_response = get_ai_response(history, selected_model)  # اینجا model را پاس می‌دهیم
+    # --- اضافه کردن وضعیت فعلی فایل‌های پروژه ---
+    user_folder = get_user_folder(user.username)
+    current_files_content = ""
+    if user_folder.exists():
+        for file_path in sorted(user_folder.iterdir()):  # مرتب برای ثبات
+            if file_path.is_file():
+                try:
+                    content = file_path.read_text(encoding='utf-8').strip()
+                    if content:  # فقط فایل‌های غیرخالی
+                        current_files_content += f"```{file_path.name}\n{content}\n```\n\n"
+                except Exception:
+                    pass  # اگر فایل خوانده نشد، نادیده بگیر
 
-    # جدا کردن متن و ذخیره کدها
+    if current_files_content:
+        current_state_msg = {
+            "role": "system",
+            "content": "محتوای فعلی دقیق فایل‌های پروژه کاربر (پایه تغییرات شما):\n\n" + current_files_content
+        }
+        history.insert(1, current_state_msg)  # بلافاصله بعد از SYSTEM_PROMPT
+
+    # دریافت پاسخ AI
+    ai_response = get_ai_response(history, selected_model)
+
+    # جدا کردن متن و ذخیره کدها (بدون تغییر)
     display_text, new_files = extract_and_save_code(ai_response, user.username)
 
     # ذخیره فقط متن توضیحی در دیتابیس
