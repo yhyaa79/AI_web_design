@@ -11,12 +11,22 @@ let editor;
 
 
 // تابع اضافه کردن پیام به چت
+// ابتدا تابع addMessage را به این شکل تغییر دهید (تا المنت را برگرداند)
 function addMessage(role, content) {
+    const messagesContainer = document.querySelector('.messages');
     const div = document.createElement('div');
     div.className = `message ${role}`;
     div.textContent = content;
+
+    // اگر پیام لودینگ است، یک کلاس خاص اضافه می‌کنیم تا بعداً راحت‌تر پیدا کنیم
+    if (content === 'لطفا صبر کنید...') {
+        div.classList.add('loading-message');
+    }
+
     messagesContainer.appendChild(div);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+    return div; // المنت ساخته‌شده را برمی‌گردانیم
 }
 
 // تابع آپدیت لیست فایل‌ها در UI

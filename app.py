@@ -10,6 +10,12 @@ from chat_bot import get_ai_response, SYSTEM_PROMPT
 import zipfile
 from io import BytesIO
 
+from datetime import datetime, timedelta
+
+# === تنظیمات rate limit ===
+RATE_LIMIT_ENABLED = True   # اگر False باشد، محدودیت کاملاً غیرفعال می‌شود
+DAILY_LIMIT = 2             # تعداد مجاز پیام در ۲۴ ساعت
+LIMIT_PERIOD_SECONDS = 24 * 60 * 60  # ۲۴ ساعت به ثانیه
 
 app = Flask(__name__)
 app.secret_key = 'your_very_secret_key_here'  # حتماً تغییر بده
@@ -102,7 +108,8 @@ def get_or_create_user(ip):
         while User.query.filter_by(username=username).first():
             username = generate_username()
         
-        user = User(ip_address=ip, username=username)
+        user = User(ip_address=ip, username=username,
+        message_count=0, last_message_time=None)  # مقداردهی صریح
         db.session.add(user)
         db.session.commit()
 
@@ -142,18 +149,39 @@ def get_or_create_user(ip):
 def index():
     return render_template('index.html')
 
+# تغییرات در route /chat در app.py (جایگزین بخش مربوط به /chat)
 @app.route('/chat', methods=['POST'])
 def chat():
     data = request.get_json()
     message_text = data.get('message', '').strip()
     selected_model = data.get('model', 'gpt-4o-mini')
+
     if not message_text:
         return jsonify({'error': 'پیام خالی است'}), 400
 
     ip = request.remote_addr
     user = get_or_create_user(ip)
 
-    # ذخیره پیام کاربر
+    # === چک rate limit ===
+    if RATE_LIMIT_ENABLED:
+        now = datetime.utcnow()
+
+        # اگر اولین پیام یا بیش از ۲۴ ساعت از آخرین پیام گذشته → ریست شمارنده
+        if user.last_message_time is None or (now - user.last_message_time) > timedelta(seconds=LIMIT_PERIOD_SECONDS):
+            user.message_count = 0  # ریست
+
+        user.message_count += 1
+
+        if user.message_count > DAILY_LIMIT:
+            return jsonify({
+                'error': f'شما به حد مجاز {DAILY_LIMIT} پیام در ۲۴ ساعت رسیده‌اید. لطفاً ۲۴ ساعت صبر کنید یا فردا دوباره امتحان کنید.'
+            }), 429
+
+        # به‌روزرسانی زمان آخرین پیام (فقط اگر پیام مجاز باشد)
+        user.last_message_time = now
+        db.session.commit()
+
+    # ذخیره پیام کاربر (بعد از چک rate limit)
     user_msg = Message(user_id=user.id, role='user', content=message_text)
     db.session.add(user_msg)
     db.session.commit()
@@ -169,26 +197,26 @@ def chat():
     user_folder = get_user_folder(user.username)
     current_files_content = ""
     if user_folder.exists():
-        for file_path in sorted(user_folder.iterdir()):  # مرتب برای ثبات
+        for file_path in sorted(user_folder.iterdir()):
             if file_path.is_file():
                 try:
                     content = file_path.read_text(encoding='utf-8').strip()
-                    if content:  # فقط فایل‌های غیرخالی
-                        current_files_content += f"```{file_path.name}\n{content}\n```\n\n"
+                    if content:
+                        current_files_content += f"`{file_path.name}`\n{content}\n```\n\n"
                 except Exception:
-                    pass  # اگر فایل خوانده نشد، نادیده بگیر
+                    pass
 
     if current_files_content:
         current_state_msg = {
             "role": "system",
             "content": "محتوای فعلی دقیق فایل‌های پروژه کاربر (پایه تغییرات شما):\n\n" + current_files_content
         }
-        history.insert(1, current_state_msg)  # بلافاصله بعد از SYSTEM_PROMPT
+        history.insert(1, current_state_msg)
 
     # دریافت پاسخ AI
     ai_response = get_ai_response(history, selected_model)
 
-    # جدا کردن متن و ذخیره کدها (بدون تغییر)
+    # جدا کردن متن و ذخیره کدها
     display_text, new_files = extract_and_save_code(ai_response, user.username)
 
     # ذخیره فقط متن توضیحی در دیتابیس

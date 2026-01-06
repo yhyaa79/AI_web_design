@@ -10,7 +10,11 @@ class User(db.Model):
     ip_address = db.Column(db.String(45), unique=True, nullable=False)
     username = db.Column(db.String(50), unique=True, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
+    
+    # ستون‌های جدید برای rate limit
+    message_count = db.Column(db.Integer, default=0)          # تعداد پیام‌های کاربر در ۲۴ ساعت جاری
+    last_message_time = db.Column(db.DateTime, nullable=True) # زمان آخرین پیام موفق کاربر
+    
     messages = db.relationship('Message', backref='user', lazy=True, cascade="all, delete-orphan")
 
 class Message(db.Model):
