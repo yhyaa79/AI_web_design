@@ -2,6 +2,7 @@
 const originalSendHTML = sendButton.innerHTML; // SVG اصلی فلش
 
 // تابع ارسال پیام (اصلاح‌شده)
+// تابع ارسال پیام (اصلاح‌شده برای نمایش پیام rate limit)
 async function sendMessage() {
     const textarea = document.querySelector('.write-message');
     const message = textarea.value.trim();
@@ -10,7 +11,7 @@ async function sendMessage() {
     // گرفتن مدل انتخاب‌شده
     const selectedModel = document.getElementById('model-select').value || 'openai/gpt-4o-mini';
 
-    // اضافه کردن پیام کاربر
+    // اضافه کردن پیام کاربر (همیشه نمایش داده می‌شود)
     addMessage('user', message);
     textarea.value = '';
 
@@ -19,7 +20,7 @@ async function sendMessage() {
 
     // تغییر دکمه به حالت لودینگ
     sendButton.disabled = true;
-    sendButton.classList.add('loading'); // می‌توانید در CSS استایل لودینگ تعریف کنید
+    sendButton.classList.add('loading');
     sendButton.innerHTML = `
         <svg class="spinner" viewBox="0 0 50 50">
             <circle cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="5"></circle>
@@ -36,32 +37,44 @@ async function sendMessage() {
             })
         });
 
+        // حذف لودینگ در هر حالت
+        loadingMessageElement.remove();
+
         if (response.ok) {
             const data = await response.json();
 
-            // حذف پیام لودینگ
-            loadingMessageElement.remove();
-
-            // اضافه کردن پاسخ واقعی
+            // نمایش پاسخ واقعی AI
             addMessage('assistant', data.assistant_message);
 
-            // اگر فایل‌های جدید ایجاد شد
+            // به‌روزرسانی لیست فایل‌ها اگر لازم بود
             if (data.new_files && data.new_files.length > 0) {
                 loadFileList();
             }
         } else {
-            loadingMessageElement.remove();
-            addMessage('assistant', 'خطایی رخ داد. دوباره امتحان کنید.');
+            // وضعیت غیر 200 (مثل 429 برای rate limit یا سایر خطاها)
+            let errorMessage = 'خطایی رخ داد. دوباره امتحان کنید.';
+
+            try {
+                const errorData = await response.json();
+                if (errorData.error) {
+                    errorMessage = errorData.error; // دقیقاً پیام بک‌اند (مثل پیام محدودیت)
+                }
+            } catch (e) {
+                // اگر JSON نبود
+            }
+
+            // نمایش پیام خطا به عنوان پیام assistant
+            addMessage('assistant', errorMessage);
         }
     } catch (err) {
         console.error('خطا در ارسال پیام:', err);
         loadingMessageElement.remove();
-        addMessage('assistant', 'خطا در ارتباط با سرور.');
+        addMessage('assistant', 'خطا در ارتباط با سرور (شبکه).');
     } finally {
-        // برگرداندن دکمه به حالت اولیه در هر شرایطی
+        // برگرداندن دکمه به حالت اولیه
         sendButton.disabled = false;
         sendButton.classList.remove('loading');
-        sendButton.innerHTML = originalSendHTML; // SVG اصلی فلش
+        sendButton.innerHTML = originalSendHTML;
     }
 }
 
