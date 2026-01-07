@@ -38,7 +38,7 @@ p {
     position: absolute;
     top: 8px;
     right: 20px;
-    background: #ffffff;
+    background: #313135;
     border-radius: 15px;
     height: 30px;
     border: none;
@@ -46,7 +46,7 @@ p {
 }
 
 .download-btn:hover {
-    background: #d0d0d0;
+    background: #7133e0fc;
 }
 
 .login-btn {
@@ -56,7 +56,7 @@ p {
     position: absolute;
     top: 8px;
     right: 135px;
-    background: #ffffff;
+    background: #313135;
     border-radius: 15px;
     height: 30px;
     border: none;
@@ -64,7 +64,7 @@ p {
 }
 
 .login-btn:hover {
-    background: #d0d0d0;
+    background: #7133e0fc;
 }
 
 
@@ -75,7 +75,7 @@ p {
     position: absolute;
     top: 8px;
     left: 41.5%;
-    background: #ffffff;
+    background: #313135;
     border-radius: 15px;
     height: 30px;
     border: none;
@@ -83,7 +83,7 @@ p {
 }
 
 .zoom-in-btn:hover {
-    background: #d0d0d0;
+    background: #7133e0fc;
 }
 
 
@@ -96,7 +96,7 @@ p {
     top: 15px;
     right: 20px;
     opacity: 0.4;
-    background: #ffffff;
+    background: #313135;
     border-radius: 15px;
     height: 30px;
     z-index: 100;
@@ -105,7 +105,7 @@ p {
 }
 
 .zoom-out-btn:hover {
-    background: #d0d0d0;
+    background: #7133e0fc;
 }
 
 
@@ -113,12 +113,12 @@ p {
     position: absolute;
     top: 8px;
     left: 31%;
-    background: #ffffff;
+    background: #313135;
     border-radius: 15px;
 }
 
 .code-heder {
-    background: #ffffff;
+    background: #313135;
     border-radius: 15px;
     width: 65px;
     height: 30px;
@@ -126,7 +126,7 @@ p {
 }
 
 .preview-heder {
-    background: #ffffff;
+    background: #313135;
     border-radius: 15px;
     width: 65px;
     height: 30px;
@@ -134,7 +134,7 @@ p {
 }
 
 .tab-btn {
-    background: #ffffff;
+    background: #313135;
     border-radius: 15px;
     width: 65px;
     height: 30px;
@@ -147,12 +147,12 @@ p {
 }
 
 .tab-btn:hover {
-    background: #d0d0d0;
+    background: #7133e0fc;
     /* رنگ hover ملایم‌تر از active */
 }
 
 .tab-btn.active {
-    background: #878787;
+    background: #7133e0;
     /* رنگ وقتی فعال است */
 }
 
@@ -163,7 +163,7 @@ p {
     position: absolute;
     top: 8px;
     left: 48%;
-    background: #ffffff;
+    background: #313135;
     border-radius: 15px;
     height: 30px;
     border: none;
@@ -171,7 +171,7 @@ p {
 }
 
 .save-file-btn:hover {
-    background: #d0d0d0;
+    background: #7133e0fc;
     /* رنگ hover ملایم‌تر از active */
 }
 
@@ -183,7 +183,7 @@ p {
     position: absolute;
     top: 8px;
     left: 30px;
-    background: #ffffff;
+    background: #313135;
     border-radius: 15px;
     height: 30px;
     border: none;
@@ -191,7 +191,7 @@ p {
 }
 
 .new-btn:hover {
-    background: #d0d0d0;
+    background: #7133e0fc;
 }
 
 .container {
@@ -248,7 +248,8 @@ p {
     margin: 0 10px;
     border-radius: 10px 10px 0 0;
     background: #202122;
-
+    border: 1px solid #8c8c8c;
+    border-bottom: none;
 }
 
 .input-area textarea {
@@ -270,7 +271,7 @@ p {
 }
 
 .send-message:hover {
-    background: #d0d0d0;
+    background: #7133e0fc;
 }
 
 
@@ -291,6 +292,7 @@ p {
     border-radius: 0 0 10px 10px;
     background: #202122;
     color: white;
+    border: 1px solid #8c8c8c;
 }
 
 .code-section {
@@ -319,7 +321,7 @@ p {
 }
 
 .code-tabs button.active {
-    background: #fff;
+    background: #7133e0;
     border-bottom: 2px solid #007bff;
 }
 
@@ -356,13 +358,9 @@ p {
 }
 
 .file-name.active-file {
-    background: #949494;
+    background: #7133e0;
 }
 
-.file-name.active {
-    background: #949494;
-    /* رنگ وقتی فعال است */
-}
 
 .icon-files {
     display: inline-flex;
