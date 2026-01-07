@@ -5,8 +5,13 @@
 
 
 body {
-    background-color: #000000;
-    font-family: 'Vazir', sans-serif;
+  background-color: #000000;
+  background-image:
+    radial-gradient(circle farthest-corner at 15% 25%, rgba(81,175,249,0.4), transparent 35%),
+    radial-gradient(ellipse farthest-corner at 75% 20%, rgba(81,175,249,0.3), transparent 45%),
+    radial-gradient(circle farthest-corner at 40% 80%, rgba(81,175,249,0.35), transparent 40%),
+    radial-gradient(ellipse farthest-corner at 85% 60%, rgba(81,175,249,0.25), transparent 50%),
+    radial-gradient(circle farthest-corner at 30% 50%, rgba(81,175,249,0.3), transparent 45%);
 }
 
 
@@ -15,7 +20,7 @@ html {
     height: 100%;
     margin: 0;
     padding: 0;
-    background: #595959;
+    font-family: 'Vazir', Arial, sans-serif;
 }
 
 p {
@@ -215,15 +220,28 @@ p {
 }
 
 .message {
+
+}
+
+.user {
     flex: 2;
     overflow-y: auto;
     padding: 20px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    background: #dedede;
-    min-height: 100px;
+    margin-left: 15px;
+    border-radius: 10px 10px 1px 10px;
+    background: rgba(0, 0, 0, 0.4);
+    min-height: 10px;
+    color: #a4a4a4;
 }
 
+.assistant {
+    flex: 2;
+    overflow-y: auto;
+    padding: 10px;
+    margin-bottom: 50px;
+    min-height: 10px;
+    color: #a4a4a4;
+}
 
 .input-area {
     display: flex;
@@ -232,7 +250,7 @@ p {
     gap: 10px;
     margin: 0 10px;
     border-radius: 10px 10px 0 0;
-    background: #f8f8f8;
+    background: #f8f8f84d;
 
 }
 
@@ -273,7 +291,7 @@ p {
     gap: 10px;
     margin: 0 10px 10px 10px;
     border-radius: 0 0 10px 10px;
-    background: #f8f8f8;
+    background: #f8f8f84d;
 }
 
 .code-section {
@@ -383,7 +401,8 @@ pre {
 /* بهبود ظاهر CodeMirror */
 .code-display .CodeMirror {
     height: 100%;
-    font-size: 15px; /* اندازه فونت مناسب */
+    font-size: 15px;
+    /* اندازه فونت مناسب */
     font-family: 'Fira Code', 'Vazir', Consolas, Monaco, 'Courier New', monospace;
     overflow: hidden;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
@@ -395,8 +414,8 @@ pre {
 }
 
 .code-display .CodeMirror-line::selection,
-.code-display .CodeMirror-line > span::selection,
-.code-display .CodeMirror-line > span > span::selection {
+.code-display .CodeMirror-line>span::selection,
+.code-display .CodeMirror-line>span>span::selection {
     background: #414a6b;
 }
 
@@ -455,13 +474,26 @@ pre {
 }
 
 @keyframes spin {
-    100% { transform: rotate(360deg); }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 @keyframes dash {
-    0% { stroke-dasharray: 1, 200; stroke-dashoffset: 0; }
-    50% { stroke-dasharray: 90, 200; stroke-dashoffset: -35; }
-    100% { stroke-dasharray: 90, 200; stroke-dashoffset: -124; }
+    0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+    }
+
+    50% {
+        stroke-dasharray: 90, 200;
+        stroke-dashoffset: -35;
+    }
+
+    100% {
+        stroke-dasharray: 90, 200;
+        stroke-dashoffset: -124;
+    }
 }
 
 .message.loading-message {
