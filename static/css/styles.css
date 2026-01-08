@@ -5,7 +5,7 @@
 
 
 body {
-  background-color: #000000;
+    background-color: #000000;
 }
 
 
@@ -214,9 +214,7 @@ p {
     margin-top: 10px;
 }
 
-.message {
-
-}
+.message {}
 
 .user {
     flex: 2;
@@ -328,7 +326,7 @@ p {
 .files-display {
     width: 160px;
     overflow-y: auto;
-    background: #dedede;
+    background: #202122;
     border-radius: 10px 0 0 10px;
     text-align: left;
     direction: ltr;
@@ -388,6 +386,25 @@ p {
 
 .CodeMirror {
     height: 100% !important;
+}
+
+.CodeMirror-gutters {
+    background-color: #272727 !important;
+    padding: 6px;
+    border-left: 2px solid #444444 !important;
+    border-right: none !important;
+}
+
+.CodeMirror {
+    background: #202122 !important;
+}
+
+.CodeMirror-sizer {
+        margin-left: 36px !important;
+}
+
+.CodeMirror pre.CodeMirror-line  {
+ padding-left: 20px !important;
 }
 
 pre {
