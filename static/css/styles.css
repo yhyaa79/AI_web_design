@@ -220,10 +220,10 @@ p {
 .user {
     flex: 2;
     overflow-y: auto;
-    padding: 20px;
+    padding: 10px;
     border-radius: 10px;
     margin-bottom: 10px;
-    background: #202122;
+    background: #512d94;
     min-height: 10px;
     color: white;
 }
@@ -236,6 +236,10 @@ p {
     border-radius: 10px;
     min-height: 10px;
     background: #202122;
+    color: white;
+}
+
+.system {
     color: white;
 }
 
