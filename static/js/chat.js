@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
     editor = CodeMirror(document.getElementById("code-editor-container"), {
         value: "فایل مورد نظر خود را از نوار کناری انتخاب کنید",
         mode: "htmlmixed",
-        theme: "default",
+        theme: "dracula",
         lineNumbers: true,
         lineWrapping: true,
         autoCloseBrackets: true,

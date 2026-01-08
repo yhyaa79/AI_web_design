@@ -246,7 +246,7 @@ p {
     margin: 0 10px;
     border-radius: 10px 10px 0 0;
     background: #202122;
-    border: 1px solid #8c8c8c;
+    border: 2px solid #444444;
     border-bottom: none;
 }
 
@@ -266,6 +266,8 @@ p {
     border: none;
     padding: 2px;
     transition: background 0.2s ease;
+    background: #512d94;
+    color: white;
 }
 
 .send-message:hover {
@@ -290,7 +292,7 @@ p {
     border-radius: 0 0 10px 10px;
     background: #202122;
     color: white;
-    border: 1px solid #8c8c8c;
+    border: 2px solid #444444;
 }
 
 .code-section {
@@ -364,6 +366,7 @@ p {
     display: inline-flex;
     gap: 5px;
     margin: auto 0;
+    color: white;
 }
 
 .code-display {
