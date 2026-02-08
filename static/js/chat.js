@@ -1,3 +1,6 @@
+// chat.js
+
+
 // تابع ارسال پیام
 const originalSendHTML = sendButton.innerHTML; // SVG اصلی فلش
 

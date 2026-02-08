@@ -1,3 +1,5 @@
+// clearChat.js
+
 // چت جدید / پاک کردن چت
 const clearChatBtn = document.getElementById('clear-chat-btn');
 

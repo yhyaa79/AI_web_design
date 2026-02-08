@@ -1,3 +1,5 @@
+// codePreview.js
+
 // مدیریت تب‌های code و preview
 const codeTab = document.querySelector('.code-heder');
 const previewTab = document.querySelector('.preview-heder');

@@ -1,4 +1,4 @@
-// static/js/script.js
+// file.js
 
 const sendButton = document.querySelector('.send-message');
 const textarea = document.querySelector('.write-message');

@@ -1,3 +1,5 @@
+// script.js
+
 // اضافه کردن حالت active به قسمت tab-btn 
 document.querySelectorAll('.tab-btn').forEach(button => {
     button.addEventListener('click', () => {

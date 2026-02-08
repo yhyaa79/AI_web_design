@@ -1,3 +1,5 @@
+// zoom.js
+
 const zoomInBtn = document.querySelector('.zoom-in-btn');
 const zoomOutBtn = document.querySelector('.zoom-out-btn');
 
