@@ -13,12 +13,12 @@ from io import BytesIO
 from datetime import datetime, timedelta
 
 # === تنظیمات rate limit ===
-RATE_LIMIT_ENABLED = True   # اگر False باشد، محدودیت کاملاً غیرفعال می‌شود
-DAILY_LIMIT = 2             # تعداد مجاز پیام در ۲۴ ساعت
+RATE_LIMIT_ENABLED = True  # اگر False باشد، محدودیت کاملاً غیرفعال می‌شود
+DAILY_LIMIT = 2  # تعداد مجاز پیام در ۲۴ ساعت
 LIMIT_PERIOD_SECONDS = 24 * 60 * 60  # ۲۴ ساعت به ثانیه
 
 app = Flask(__name__)
-app.secret_key = 'your_very_secret_key_here'  # حتماً تغییر بده
+app.secret_key = "your_very_secret_key_here"  # حتماً تغییر بده
 
 
 import os
@@ -28,35 +28,37 @@ from pathlib import Path
 PROJECTS_DIR = Path("user_projects")
 PROJECTS_DIR.mkdir(exist_ok=True)
 
+
 def get_user_folder(username):
     """فولدر اختصاصی کاربر رو برگردون یا بساز"""
     user_folder = PROJECTS_DIR / username
     user_folder.mkdir(exist_ok=True)
     return user_folder
 
+
 def extract_and_save_code(ai_response, username):
     """استخراج کد + برگرداندن فقط متن توضیحی برای نمایش در چت"""
     user_folder = get_user_folder(username)
-    
+
     files_saved = []
     current_file = None
     current_content = []
     in_code_block = False
 
     text_parts = []  # فقط متن عادی (برای نمایش در چت)
-    lines = ai_response.split('\n')
+    lines = ai_response.split("\n")
 
     for line in lines:
         stripped = line.strip()
 
-        if stripped.startswith('```'):
+        if stripped.startswith("```"):
             if in_code_block:
                 # پایان بلوک کد → ذخیره فایل
                 if current_file:
                     file_path = user_folder / current_file
-                    content_to_save = '\n'.join(current_content).strip()
+                    content_to_save = "\n".join(current_content).strip()
                     if content_to_save:  # فقط اگر محتوا داشت
-                        file_path.write_text(content_to_save + '\n', encoding='utf-8')
+                        file_path.write_text(content_to_save + "\n", encoding="utf-8")
                         files_saved.append(current_file)
                 in_code_block = False
                 current_file = None
@@ -75,7 +77,7 @@ def extract_and_save_code(ai_response, username):
             # متن عادی → برای نمایش در چت
             text_parts.append(line)
 
-    clean_text = '\n'.join(text_parts).strip()
+    clean_text = "\n".join(text_parts).strip()
     if not clean_text:
         clean_text = "فایل‌های جدید با موفقیت ساخته/به‌روزرسانی شدند!"
 
@@ -83,11 +85,11 @@ def extract_and_save_code(ai_response, username):
 
 
 # تنظیمات SQLAlchemy
-app.config['SQLALCHEMY_DATABASE_URI'] = (
+app.config["SQLALCHEMY_DATABASE_URI"] = (
     f"mysql+mysqlconnector://{DATABASE_CONFIG['user']}:{DATABASE_CONFIG['password']}"
     f"@{DATABASE_CONFIG['host']}/{DATABASE_NAME}"
 )
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
 
@@ -96,10 +98,14 @@ with app.app_context():
     create_database_if_not_exists()
     db.create_all()  # اگر جدول‌ها از قبل ساخته نشده باشن (backup)
 
+
 def generate_username():
     """ساخت نام کاربری تصادفی مثل Guest_abcd1234"""
-    random_part = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(8))
+    random_part = "".join(
+        secrets.choice(string.ascii_letters + string.digits) for _ in range(8)
+    )
     return f"Guest_{random_part}"
+
 
 def get_or_create_user(ip):
     user = User.query.filter_by(ip_address=ip).first()
@@ -107,9 +113,10 @@ def get_or_create_user(ip):
         username = generate_username()
         while User.query.filter_by(username=username).first():
             username = generate_username()
-        
-        user = User(ip_address=ip, username=username,
-        message_count=0, last_message_time=None)  # مقداردهی صریح
+
+        user = User(
+            ip_address=ip, username=username, message_count=0, last_message_time=None
+        )  # مقداردهی صریح
         db.session.add(user)
         db.session.commit()
 
@@ -118,7 +125,8 @@ def get_or_create_user(ip):
         user_folder.mkdir(exist_ok=True)
 
         # بازسازی فایل‌های پیش‌فرض
-        (user_folder / "index.html").write_text("""<!DOCTYPE html>
+        (user_folder / "index.html").write_text(
+            """<!DOCTYPE html>
             <html lang="fa" dir="rtl">
             <head>
                 <meta charset="UTF-8">
@@ -131,9 +139,12 @@ def get_or_create_user(ip):
                 <p>با هوش مصنوعی آن را طراحی کنید.</p>
                 <script src="script.js"></script>
             </body>
-            </html>""", encoding='utf-8')
+            </html>""",
+            encoding="utf-8",
+        )
 
-        (user_folder / "style.css").write_text("""body {
+        (user_folder / "style.css").write_text(
+            """body {
                 font-family: 'Vazir', sans-serif;
                 background: #f0f0f0;
                 text-align: center;
@@ -141,23 +152,27 @@ def get_or_create_user(ip):
             }
             h1 {
                 color: #333;
-            }""", encoding='utf-8')
+            }""",
+            encoding="utf-8",
+        )
 
     return user
 
-@app.route('/')
+
+@app.route("/")
 def index():
-    return render_template('index.html')
+    return render_template("index.html")
+
 
 # تغییرات در route /chat در app.py (جایگزین بخش مربوط به /chat)
-@app.route('/chat', methods=['POST'])
+@app.route("/chat", methods=["POST"])
 def chat():
     data = request.get_json()
-    message_text = data.get('message', '').strip()
-    selected_model = data.get('model', 'gpt-4o-mini')
+    message_text = data.get("message", "").strip()
+    selected_model = data.get("model", "gpt-4o-mini")
 
     if not message_text:
-        return jsonify({'error': 'پیام خالی است'}), 400
+        return jsonify({"error": "پیام خالی است"}), 400
 
     ip = request.remote_addr
     user = get_or_create_user(ip)
@@ -167,27 +182,36 @@ def chat():
         now = datetime.utcnow()
 
         # اگر اولین پیام یا بیش از ۲۴ ساعت از آخرین پیام گذشته → ریست شمارنده
-        if user.last_message_time is None or (now - user.last_message_time) > timedelta(seconds=LIMIT_PERIOD_SECONDS):
+        if user.last_message_time is None or (now - user.last_message_time) > timedelta(
+            seconds=LIMIT_PERIOD_SECONDS
+        ):
             user.message_count = 0  # ریست
 
         user.message_count += 1
 
         if user.message_count > DAILY_LIMIT:
-            return jsonify({
-                'error': f'شما به حد مجاز {DAILY_LIMIT} پیام در ۲۴ ساعت رسیده‌اید. لطفاً ۲۴ ساعت صبر کنید یا فردا دوباره امتحان کنید.'
-            }), 429
+            return (
+                jsonify(
+                    {
+                        "error": f"شما به حد مجاز {DAILY_LIMIT} پیام در ۲۴ ساعت رسیده‌اید. لطفاً ۲۴ ساعت صبر کنید یا فردا دوباره امتحان کنید."
+                    }
+                ),
+                429,
+            )
 
         # به‌روزرسانی زمان آخرین پیام (فقط اگر پیام مجاز باشد)
         user.last_message_time = now
         db.session.commit()
 
     # ذخیره پیام کاربر (بعد از چک rate limit)
-    user_msg = Message(user_id=user.id, role='user', content=message_text)
+    user_msg = Message(user_id=user.id, role="user", content=message_text)
     db.session.add(user_msg)
     db.session.commit()
 
     # ساخت history پایه از دیتابیس (شامل پیام جدید کاربر)
-    messages = Message.query.filter_by(user_id=user.id).order_by(Message.timestamp).all()
+    messages = (
+        Message.query.filter_by(user_id=user.id).order_by(Message.timestamp).all()
+    )
     history = [{"role": msg.role, "content": msg.content} for msg in messages]
 
     # همیشه SYSTEM_PROMPT را اول بگذار
@@ -200,16 +224,19 @@ def chat():
         for file_path in sorted(user_folder.iterdir()):
             if file_path.is_file():
                 try:
-                    content = file_path.read_text(encoding='utf-8').strip()
+                    content = file_path.read_text(encoding="utf-8").strip()
                     if content:
-                        current_files_content += f"`{file_path.name}`\n{content}\n```\n\n"
+                        current_files_content += (
+                            f"`{file_path.name}`\n{content}\n```\n\n"
+                        )
                 except Exception:
                     pass
 
     if current_files_content:
         current_state_msg = {
             "role": "system",
-            "content": "محتوای فعلی دقیق فایل‌های پروژه کاربر (پایه تغییرات شما):\n\n" + current_files_content
+            "content": "محتوای فعلی دقیق فایل‌های پروژه کاربر (پایه تغییرات شما):\n\n"
+            + current_files_content,
         }
         history.insert(1, current_state_msg)
 
@@ -220,49 +247,50 @@ def chat():
     display_text, new_files = extract_and_save_code(ai_response, user.username)
 
     # ذخیره فقط متن توضیحی در دیتابیس
-    assistant_msg = Message(user_id=user.id, role='assistant', content=display_text)
+    assistant_msg = Message(user_id=user.id, role="assistant", content=display_text)
     db.session.add(assistant_msg)
     db.session.commit()
 
-    return jsonify({
-        'username': user.username,
-        'user_message': message_text,
-        'assistant_message': display_text,
-        'new_files': new_files
-    })
+    return jsonify(
+        {
+            "username": user.username,
+            "user_message": message_text,
+            "assistant_message": display_text,
+            "new_files": new_files,
+        }
+    )
 
-@app.route('/history')
+
+@app.route("/history")
 def history():
     ip = request.remote_addr
     user = User.query.filter_by(ip_address=ip).first()
     if not user:
-        return jsonify({'messages': []})
-    
-    messages = Message.query.filter_by(user_id=user.id).order_by(Message.timestamp).all()
-    history = [
-        {'role': msg.role, 'content': msg.content}
-        for msg in messages
-    ]
-    return jsonify({'messages': history, 'username': user.username})
+        return jsonify({"messages": []})
+
+    messages = (
+        Message.query.filter_by(user_id=user.id).order_by(Message.timestamp).all()
+    )
+    history = [{"role": msg.role, "content": msg.content} for msg in messages]
+    return jsonify({"messages": history, "username": user.username})
 
 
-
-@app.route('/clear_chat', methods=['POST'])
+@app.route("/clear_chat", methods=["POST"])
 def clear_chat():
     ip = request.remote_addr
     user = User.query.filter_by(ip_address=ip).first()
-    
+
     if not user:
-        return jsonify({'status': 'error', 'message': 'کاربری یافت نشد'}), 404
+        return jsonify({"status": "error", "message": "کاربری یافت نشد"}), 404
 
     try:
         # حذف تمام پیام‌های کاربر از دیتابیس
         Message.query.filter_by(user_id=user.id).delete()
         db.session.commit()
-        
+
         # مسیر فولدر کاربر
         user_folder = PROJECTS_DIR / user.username
-        
+
         # اگر فولدر وجود داشت، تمام فایل‌های داخلش را حذف کن
         if user_folder.exists() and user_folder.is_dir():
             for file_path in user_folder.iterdir():
@@ -271,68 +299,76 @@ def clear_chat():
                 elif file_path.is_dir():
                     # اگر زیرپوشه‌ای بود (که معمولاً نیست، اما برای ایمنی)
                     import shutil
+
                     shutil.rmtree(file_path)
-        
-        return jsonify({
-            'status': 'success', 
-            'message': 'تمام مکالمات و فایل‌های پروژه با موفقیت پاک شد و پروژه پیش‌فرض بازسازی شد.'
-        })
-    
+
+        return jsonify(
+            {
+                "status": "success",
+                "message": "تمام مکالمات و فایل‌های پروژه با موفقیت پاک شد و پروژه پیش‌فرض بازسازی شد.",
+            }
+        )
+
     except Exception as e:
         db.session.rollback()
-        return jsonify({'status': 'error', 'message': 'خطا در پاک کردن مکالمات یا فایل‌ها'}), 500    
+        return (
+            jsonify(
+                {"status": "error", "message": "خطا در پاک کردن مکالمات یا فایل‌ها"}
+            ),
+            500,
+        )
 
-@app.route('/get_files')
+
+@app.route("/get_files")
 def get_user_files():
     ip = request.remote_addr
     user = User.query.filter_by(ip_address=ip).first()
     if not user:
-        return jsonify({'files': []})
-    
+        return jsonify({"files": []})
+
     user_folder = PROJECTS_DIR / user.username
     if not user_folder.exists():
-        return jsonify({'files': []})
-    
+        return jsonify({"files": []})
+
     files = [f.name for f in user_folder.iterdir() if f.is_file()]
-    return jsonify({'files': sorted(files)})
+    return jsonify({"files": sorted(files)})
 
 
-@app.route('/get_file/<filename>')
+@app.route("/get_file/<filename>")
 def get_file(filename):
     ip = request.remote_addr
     user = User.query.filter_by(ip_address=ip).first()
     if not user:
         return "کاربر یافت نشد", 404
-    
+
     user_folder = PROJECTS_DIR / user.username
     file_path = user_folder / filename
-    
+
     if not file_path.exists() or not file_path.is_file():
         return "فایل یافت نشد", 404
-    
-    if filename.endswith('.html'):
-        mimetype = 'text/html'
-    elif filename.endswith('.css'):
-        mimetype = 'text/css'
-    elif filename.endswith('.js'):
-        mimetype = 'text/javascript'
+
+    if filename.endswith(".html"):
+        mimetype = "text/html"
+    elif filename.endswith(".css"):
+        mimetype = "text/css"
+    elif filename.endswith(".js"):
+        mimetype = "text/javascript"
     else:
-        mimetype = 'text/plain'
-    
-    return file_path.read_text(encoding='utf-8'), 200, {'Content-Type': mimetype}
+        mimetype = "text/plain"
+
+    return file_path.read_text(encoding="utf-8"), 200, {"Content-Type": mimetype}
 
 
-
-@app.route('/preview')
+@app.route("/preview")
 def preview():
     ip = request.remote_addr
     user = User.query.filter_by(ip_address=ip).first()
     if not user:
         return "کاربر یافت نشد", 404
-    
+
     user_folder = PROJECTS_DIR / user.username
-    index_path = user_folder / 'index.html'
-    
+    index_path = user_folder / "index.html"
+
     if not index_path.exists():
         info_html = """
         <div style="text-align: center; max-width: 700px; margin: 0 auto; padding: 20px;">
@@ -353,69 +389,72 @@ def preview():
             </p>
         </div>
         """
-        return info_html, 200, {'Content-Type': 'text/html; charset=utf-8'}
-    
-    html = index_path.read_text(encoding='utf-8')
-    
+        return info_html, 200, {"Content-Type": "text/html; charset=utf-8"}
+
+    html = index_path.read_text(encoding="utf-8")
+
     # Inline کردن style.css اگر وجود داشت
-    css_path = user_folder / 'style.css'
+    css_path = user_folder / "style.css"
     if css_path.exists() and '<link rel="stylesheet" href="style.css">' in html:
-        css_content = css_path.read_text(encoding='utf-8')
-        html = html.replace('<link rel="stylesheet" href="style.css">', 
-                            f'<style>\n{css_content}\n</style>')
-    
+        css_content = css_path.read_text(encoding="utf-8")
+        html = html.replace(
+            '<link rel="stylesheet" href="style.css">',
+            f"<style>\n{css_content}\n</style>",
+        )
+
     # Inline کردن script.js اگر وجود داشت
-    js_path = user_folder / 'script.js'
+    js_path = user_folder / "script.js"
     if js_path.exists() and '<script src="script.js"></script>' in html:
-        js_content = js_path.read_text(encoding='utf-8')
-        html = html.replace('<script src="script.js"></script>', 
-                            f'<script>\n{js_content}\n</script>')
-    
-    return html, 200, {'Content-Type': 'text/html; charset=utf-8'}
+        js_content = js_path.read_text(encoding="utf-8")
+        html = html.replace(
+            '<script src="script.js"></script>', f"<script>\n{js_content}\n</script>"
+        )
+
+    return html, 200, {"Content-Type": "text/html; charset=utf-8"}
 
 
-@app.route('/save_file', methods=['POST'])
+@app.route("/save_file", methods=["POST"])
 def save_file():
     ip = request.remote_addr
     user = User.query.filter_by(ip_address=ip).first()
     if not user:
-        return jsonify({'status': 'error', 'message': 'کاربر یافت نشد'}), 404
+        return jsonify({"status": "error", "message": "کاربر یافت نشد"}), 404
 
     data = request.get_json()
-    filename = data.get('filename')
-    content = data.get('content', '')
+    filename = data.get("filename")
+    content = data.get("content", "")
 
     if not filename:
-        return jsonify({'status': 'error', 'message': 'نام فایل الزامی است'}), 400
+        return jsonify({"status": "error", "message": "نام فایل الزامی است"}), 400
 
     user_folder = PROJECTS_DIR / user.username
     file_path = user_folder / filename
 
     try:
-        file_path.write_text(content + '\n', encoding='utf-8')
-        return jsonify({'status': 'success', 'message': f'فایل {filename} با موفقیت ذخیره شد'})
+        file_path.write_text(content + "\n", encoding="utf-8")
+        return jsonify(
+            {"status": "success", "message": f"فایل {filename} با موفقیت ذخیره شد"}
+        )
     except Exception as e:
-        return jsonify({'status': 'error', 'message': 'خطا در ذخیره فایل'}), 500
+        return jsonify({"status": "error", "message": "خطا در ذخیره فایل"}), 500
 
 
-
-
-@app.route('/download_project')
+@app.route("/download_project")
 def download_project():
     ip = request.remote_addr
     user = User.query.filter_by(ip_address=ip).first()
     if not user:
-        return jsonify({'error': 'کاربر یافت نشد'}), 404
+        return jsonify({"error": "کاربر یافت نشد"}), 404
 
     user_folder = PROJECTS_DIR / user.username
-    
+
     if not user_folder.exists() or not any(user_folder.iterdir()):
-        return jsonify({'error': 'پروژه خالی است یا وجود ندارد'}), 400
+        return jsonify({"error": "پروژه خالی است یا وجود ندارد"}), 400
 
     # ساخت ZIP در حافظه (بدون ذخیره روی دیسک)
     memory_file = BytesIO()
-    with zipfile.ZipFile(memory_file, 'w', zipfile.ZIP_DEFLATED) as zipf:
-        for file_path in user_folder.rglob('*'):  # همه فایل‌ها و زیرپوشه‌ها
+    with zipfile.ZipFile(memory_file, "w", zipfile.ZIP_DEFLATED) as zipf:
+        for file_path in user_folder.rglob("*"):  # همه فایل‌ها و زیرپوشه‌ها
             if file_path.is_file():
                 # مسیر نسبی داخل ZIP (بدون پیشوند user_projects/username)
                 arcname = str(file_path.relative_to(PROJECTS_DIR.parent))
@@ -425,10 +464,11 @@ def download_project():
 
     return send_file(
         memory_file,
-        mimetype='application/zip',
+        mimetype="application/zip",
         as_attachment=True,
-        download_name=f"{user.username}_project.zip"
+        download_name=f"{user.username}_project.zip",
     )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app.run(debug=True)
